@@ -1,37 +1,61 @@
 'use strict';
 
-const title = prompt("Как называется ваш проект?", "Сайт, Лендинг ... ")
+let title = prompt("Как называется ваш проект?", "Сайт, Лендинг ... ")
   || "Разработка сайта";
-const screens = prompt("Какие типы экранов нужно разработать?", "Простые, Сложные, Интерактивные")
+let screens = prompt("Какие типы экранов нужно разработать?", "Простые, Сложные, Интерактивные")
   || "Разнообразные";
-const screenPrice = parseInt(prompt("Сколько будет стоить данная работа?", 12000))
+let screenPrice = parseInt(prompt("Сколько будет стоить данная работа?", 12000))
   || 12000;
-const adaptive = confirm('Нужен ли адаптив на сайте?');
-const service1 = prompt("Какой дополнительный тип услуги нужен?", "1. ")
+let adaptive = confirm('Нужен ли адаптив на сайте?');
+let service1 = prompt("Какой дополнительный тип услуги нужен?", "1. ")
   || "не указан";
-const servicePrice1 = parseInt(prompt("Сколько это будет стоить?", 0))
+let servicePrice1 = parseInt(prompt("Сколько это будет стоить?", 0))
   || 0;
-const service2 = prompt("Какой дополнительный тип услуги нужен?", "2.")
+let service2 = prompt("Какой дополнительный тип услуги нужен?", "2.")
   || "не указан";
-const servicePrice2 = parseInt(prompt("Сколько это будет стоить?", 0))
+let servicePrice2 = parseInt(prompt("Сколько это будет стоить?", 0))
   || 0;
 
 let rollback = 10;
-let fullPrice = screenPrice + servicePrice1 + servicePrice2;
-let servicePercentPrice = Math.ceil(fullPrice * (100 - rollback) / 100);
-let message = "Что то пошло не так";
 
-if (fullPrice >= 30000) message = "Даем скидку в 10%";
-else if (fullPrice >= 15000) message = "Даем скидку в 5%";
-else if (fullPrice >= 0) message = "Скидка не предусмотрена";
+let allServicePrices, fullPrice, servicePercentPrice;
 
-console.log('title: ', typeof title, title);
-console.log('fullPrice: ', typeof fullPrice);
-console.log('adaptive: ', typeof adaptive);
-console.log('длина screens: ', screens.length);
-console.log(`Стоимость верстки экранов ${screenPrice} рублей/ долларов/гривен/юани`);
-console.log(`Стоимость разработки сайта ${fullPrice} рублей/ долларов/гривен/юани`);
+const getTitle = str => {
+  str = str.trim();
+  return str = str[0].toUpperCase() + str.slice(1).toLowerCase();
+};
+
+const getAllServicePrices = function (...prices) {
+  return prices.reduce((sum, n) => sum + n, 0);
+};
+
+function getFullPrice(n1, n2) {
+  return n1 + n2;
+}
+
+const getServicePercentPrices = (sum, percent) =>
+  Math.ceil(sum * (100 - percent) / 100);
+
+const getRollbackMessage = (cost) =>
+  cost >= 30000 ? "Даем скидку в 10%"
+    : cost >= 15000 ? "Даем скидку в 5%"
+      : cost >= 0 ? "Скидка не предусмотрена"
+        : "Что то пошло не так";
+
+const showTypeOf = function (variable) {
+  console.log(variable, typeof variable);
+}
+
+title = getTitle(title);
+allServicePrices = getAllServicePrices(servicePrice1, servicePrice2);
+fullPrice = getFullPrice(screenPrice, allServicePrices);
+servicePercentPrice = getServicePercentPrices(fullPrice, rollback);
+
+showTypeOf(title);
+showTypeOf(fullPrice);
+showTypeOf(adaptive);
+
 console.log('Типы экранов: ', screens.toLowerCase().split(", "));
-console.log(`Сумма оплаты посреднику: ${fullPrice - servicePercentPrice}`);
-console.log(`Сумма оплаты разработчику: ${servicePercentPrice}`);
-console.log('message: ', message);
+console.log(getRollbackMessage(fullPrice));
+console.log(`Сумма оплаты разработчику (без учета скидки): ${servicePercentPrice} рублей`);
+
