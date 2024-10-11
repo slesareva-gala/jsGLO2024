@@ -49,8 +49,8 @@ const appData = {
     }
 
     for (let i = 0; i < 2; i++) {
-      const name = appData.inputString(`Какой дополнительный тип услуги № ${i + 1} нужен ?`, `услуга ${i + 1}`);
-
+      let name = appData.inputString(`Какой дополнительный тип услуги № ${i + 1} нужен ?`, `услуга ${i + 1}`);
+      if (name in appData.services) name += `(${i})`;
       appData.services[name] = appData.inputNumber(`Сколько "${name}" будет стоить ?`);
     }
 
@@ -58,9 +58,8 @@ const appData = {
   },
 
   addPrices: () => {
-    for (let screen of appData.screens) {
-      appData.screenPrice += screen.price;
-    }
+
+    appData.screenPrice = appData.screens.reduce((sum, screen) => sum + screen.price, 0);
 
     for (let key in appData.services) {
       appData.allServicePrices += appData.services[key];
@@ -89,6 +88,9 @@ const appData = {
     console.log(appData.fullPrice);
     console.log(appData.servicePercentPrice);
     console.log(appData.screens);
+
+    console.log('appData.services: ', appData.services);
+    console.log('appData.screenPrice: ', appData.screenPrice);
   },
 };
 
