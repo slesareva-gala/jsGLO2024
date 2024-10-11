@@ -45,7 +45,7 @@ const appData = {
       const name = appData.inputString(`Какой тип экрана № ${i + 1} нужно разработать ?`, `тип экрана ${i + 1}`);
       const price = appData.inputNumber(`Сколько это будет стоить данная работа: "${name}" ?`);
 
-      appData.screens.push({ id: i, name: name, price: +price });
+      appData.screens.push({ id: i, name: name, price: price });
     }
 
     for (let i = 0; i < 2; i++) {
