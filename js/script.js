@@ -1,5 +1,37 @@
 'use strict';
 
+// ссылки не элементы формы
+// - название проекта
+const elTitle = document.getElementsByTagName('h1').title;
+// - кнопка "Рассчитать" и "Сброс"
+const btnStart = document.getElementsByClassName('handler_btn').start;
+const btnReset = document.getElementsByClassName('handler_btn').reset;
+// - кнопка "+" под выпадающим списком
+const btnPlus = document.querySelector('.screen-btn');
+//  - дополнительно: элемнеты-проценты и элемнеты-числa
+const elsPersent = [...document.querySelectorAll('.other-items.percent')];
+const elsNumber = [...document.querySelectorAll('.other-items.number')];
+// - ранжированный ввод процента отката 
+const elInputRollback = document.querySelector('.rollback input[type="range"]');
+// - елемент отображения текущего значение процента отката 
+const elValueRollback = document.querySelector('.rollback span.range-value');
+// - елементы отображения итогов
+const elsTotalInput = [...document.getElementsByClassName('total-input')];
+// - елементы экрана
+let elsScreens = [...document.querySelectorAll('.screen')];
+
+// для проверки, так же закоментировала appData.asking() и appData.logger()
+console.log('1)', 'elTitle', elTitle);
+console.log('2.1)', 'btnStart', btnStart);
+console.log('2.2)', 'btnReset', btnReset);
+console.log('3)', 'btnPlus', btnPlus);
+console.log('4.1)', 'elsPersent', elsPersent);
+console.log('4.2)', 'elsNumber', elsNumber);
+console.log('5)', 'elInputRollback', elInputRollback);
+console.log('6)', 'elValueRollback', elValueRollback);
+console.log('7)', 'elsTotalInput', elsTotalInput);
+console.log('8)', 'elsScreens', elsScreens);
+
 const appData = {
   title: '',
   screens: [],  // типы экранов для верстки: [{id,name,price},...]
@@ -28,13 +60,13 @@ const appData = {
   },
 
   start: () => {
-    appData.asking();
+    //appData.asking();
     appData.addPrices();
     appData.getFullPrice();
     appData.getServicePercentPrices();
     appData.getTitle();
 
-    appData.logger();
+    //appData.logger();
   },
 
   asking: () => {
@@ -75,7 +107,7 @@ const appData = {
   },
 
   getTitle: () => {
-    appData.title = appData.title.trim()[0].toUpperCase() + appData.title.trim().slice(1).toLowerCase();
+    appData.title = (appData.title.trim()[0] || '').toUpperCase() + appData.title.trim().slice(1).toLowerCase();
   },
 
   getRollbackMessage: (cost) =>
@@ -88,9 +120,6 @@ const appData = {
     console.log(appData.fullPrice);
     console.log(appData.servicePercentPrice);
     console.log(appData.screens);
-
-    console.log('appData.services: ', appData.services);
-    console.log('appData.screenPrice: ', appData.screenPrice);
   },
 };
 
