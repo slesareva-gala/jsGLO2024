@@ -15,10 +15,20 @@ const elsNumber = [...document.querySelectorAll('.other-items.number')];
 const elInputRollback = document.querySelector('.rollback input[type="range"]');
 // - елемент отображения текущего значение процента отката 
 const elValueRollback = document.querySelector('.rollback span.range-value');
-// - елементы отображения итогов
-const elsTotalInput = [...document.getElementsByClassName('total-input')];
+// - елементы отображения итогов:
+//   Cтоимость верстки
+const total = document.getElementsByClassName('total-input').total;
+//   Количество экранов
+const totalCount = document.getElementsByClassName('total-input')["total-count"];
+//   Стоимость доп. услуг
+const totalCountOther = document.getElementsByClassName('total-input')["total-count-other"];
+//   Итоговая стоимость
+const totalFullCount = document.getElementsByClassName('total-input')["total-full-count"];
+//   Стоимость с учетом отката
+const totalCountRollback = document.getElementsByClassName('total-input')["total-count-rgitollback"];
+
 // - елементы экрана
-let elsScreens = [...document.querySelectorAll('.screen')];
+let elsScreens = document.querySelectorAll('.screen');
 
 // для проверки, так же закоментировала appData.asking() и appData.logger()
 console.log('1)', 'elTitle', elTitle);
@@ -29,7 +39,11 @@ console.log('4.1)', 'elsPersent', elsPersent);
 console.log('4.2)', 'elsNumber', elsNumber);
 console.log('5)', 'elInputRollback', elInputRollback);
 console.log('6)', 'elValueRollback', elValueRollback);
-console.log('7)', 'elsTotalInput', elsTotalInput);
+console.log('7.1)', 'total: ', total);
+console.log('7.2)', 'totalCount: ', totalCount);
+console.log('7.3)', 'totalCountOther: ', totalCountOther);
+console.log('7.4)', 'totalFullCount: ', totalFullCount);
+console.log('7.5)', 'totalCountRollback: ', totalCountRollback);
 console.log('8)', 'elsScreens', elsScreens);
 
 const appData = {
