@@ -32,6 +32,8 @@ const totalCountRollback = document.getElementsByClassName('total-input')["total
 
 // - елементы экрана
 let screens = [...document.querySelectorAll('.screen')];
+// - блоки организации ввода исходных данных
+const elsBlocksEdit = document.querySelectorAll('.main-controls__views:not(:has(div.rollback')
 
 const appData = {
   title: '',
@@ -66,7 +68,17 @@ const appData = {
     appData.addPrices();
 
     appData.showResult();
+    appData.stop();
     //appData.logger();
+  },
+  stop: () => {
+    startBtn.removeEventListener('click', appData.start);
+    buttonPlus.removeEventListener('click', appData.addScreenBlock)
+    screens[0].parentElement.removeEventListener('input', appData.controlScreens)
+    screens[0].parentElement.removeEventListener('click', appData.controlScreens)
+
+    startBtn.style.display = "none";
+    elsBlocksEdit.forEach(el => el.style.zIndex = '-1')
   },
 
   addTitle: () => {
@@ -101,12 +113,16 @@ const appData = {
   inputRange: (e) => {
     appData.rollback = +e.target.value;
 
-    inputRangeValue.innerText = appData.rollback;
+    inputRangeValue.innerText = `${appData.rollback} %`;
+
+    if (startBtn.style.display === "none") {
+      appData.addSeervicePercentPrice();
+      appData.showResultRollback();
+    }
   },
 
   // расчет:
   addScreens: () => {
-    appData.screens.length = 0;
     screens.forEach((screen, index) => {
       const select = screen.querySelector('select')
       const input = screen.querySelector('input')
@@ -145,16 +161,17 @@ const appData = {
     appData.screenPrice = appData.screens.reduce((sum, screen) => sum + screen.price, 0);
     appData.screenCount = appData.screens.reduce((count, screen) => count + screen.count, 0);
 
-    appData.servicePricesNumber = 0;
     for (let key in appData.servicesNumber) {
       appData.servicePricesNumber += appData.servicesNumber[key];
     }
 
-    appData.servicePricesPersent = 0;
     for (let key in appData.servicesPercent) {
       appData.servicePricesPersent += Math.round(appData.screenPrice * appData.servicesPercent[key] / 100);
     }
     appData.fullPrice = appData.screenPrice + appData.servicePricesPersent + appData.servicePricesNumber;
+    appData.addSeervicePercentPrice();
+  },
+  addSeervicePercentPrice: () => {
     appData.servicePercentPrice = appData.fullPrice - Math.round(appData.fullPrice * appData.rollback / 100);
   },
   showResult: () => {
@@ -162,6 +179,9 @@ const appData = {
     totalCount.value = appData.screenCount;
     totalCountOther.value = appData.servicePricesPersent + appData.servicePricesNumber;
     fullTotalCount.value = appData.fullPrice;
+    appData.showResultRollback();
+  },
+  showResultRollback: () => {
     totalCountRollback.value = appData.servicePercentPrice;
   },
 
