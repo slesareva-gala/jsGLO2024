@@ -78,7 +78,10 @@ const appData = {
     screens[0].parentElement.removeEventListener('click', appData.controlScreens)
 
     startBtn.style.display = "none";
-    elsBlocksEdit.forEach(el => el.style.zIndex = '-1')
+    elsBlocksEdit.forEach(el => {
+      el.style.zIndex = '-1';
+      el.style.filter = 'grayscale(1)';
+    })
   },
 
   addTitle: () => {
