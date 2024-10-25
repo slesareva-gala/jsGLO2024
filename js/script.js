@@ -33,7 +33,11 @@ const totalCountRollback = document.getElementsByClassName('total-input')["total
 // - елементы экрана
 let screens = [...document.querySelectorAll('.screen')];
 // - блоки организации ввода исходных данных
-const elsBlocksEdit = document.querySelectorAll('.main-controls__views:not(:has(div.rollback')
+const elsBlocksEdit = document.querySelectorAll('.main-controls__views:not(:has(div.rollback');
+// - блок выбора вариантов cms
+const elHiddenCmsVariants = elsBlocksEdit[2].querySelector('.hidden-cms-variants');
+const elCmsOtherInput = elsBlocksEdit[2].querySelector('#cms-other-input');
+const elCmsSelect = elsBlocksEdit[2].querySelector('#cms-select');
 
 const appData = {
   title: '',
@@ -48,6 +52,7 @@ const appData = {
   servicePercentPrice: 0,  // сумма разработчику без учета суммы посреднику
   servicesPercent: {},  // доп.сервисы: наименование-процент 
   servicesNumber: {},  // доп.сервисы: наименование-сумма 
+  cmsPersent: 0, // % плюс к fullPrice 
 
   cloneScreen: screens[0].cloneNode(true),
 
@@ -60,12 +65,14 @@ const appData = {
     buttonPlus.addEventListener('click', () => this.addScreenBlock())
     screens[0].parentElement.addEventListener('input', () => this.controlScreens())
     screens[0].parentElement.addEventListener('click', () => this.controlScreens())
-    inputRange.addEventListener('input', (e) => this.inputRange(e))
+    inputRange.addEventListener('input', e => this.inputRange(e))
+    elsBlocksEdit[2].addEventListener('change', e => this.changeCms(e))
   },
 
   start: function () {
     this.addScreens();
     this.addServices();
+    this.addCms();
 
     this.addPrices();
     this.showResult();
@@ -78,6 +85,7 @@ const appData = {
     this.clrScreens();
     this.clrServices();
     this.clrRollback();
+    this.clrCms();
 
     this.addPrices();
     this.showResult();
@@ -158,6 +166,15 @@ const appData = {
     }
   },
 
+  changeCms: function (e) {
+    const elem = e.target;
+
+    if (elem.classList.contains('custom-checkbox'))
+      elHiddenCmsVariants.style.display = e.target.checked ? "flex" : "none";
+    if (elem === elCmsSelect) elCmsOtherInput.parentElement.style.display = (elCmsSelect.value === 'other') ? "" : "none";
+
+  },
+
   // сбор данных для расчета:
   addScreens: function () {
     screens.forEach((screen, index) => {
@@ -192,6 +209,11 @@ const appData = {
     })
   },
 
+  addCms: function () {
+    if (elHiddenCmsVariants.style.display === "flex")
+      this.cmsPersent = elCmsSelect.value, +elCmsSelect.value || 0;
+  },
+
   // сброс (обнуление) данных для расчета::
   clrScreens: function () {
     this.screens.length = 0;
@@ -207,6 +229,11 @@ const appData = {
     this.rollback = 0;
     inputRange.value = 0;
     inputRangeValue.innerText = '0 %';
+  },
+  clrCms: function () {
+    this.cmsPersent = 0;
+    elHiddenCmsVariants.style.display = "none";
+    elCmsOtherInput.parentElement.style.display = "none";
   },
 
   // расчет:
@@ -224,6 +251,7 @@ const appData = {
       this.servicePricesPersent += Math.round(this.screenPrice * this.servicesPercent[key] / 100);
     }
     this.fullPrice = this.screenPrice + this.servicePricesPersent + this.servicePricesNumber;
+    if (this.cmsPersent > 0) this.fullPrice += Math.round(this.fullPrice * this.cmsPersent / 100);
     this.addSeervicePercentPrice();
   },
   addSeervicePercentPrice: function () {
